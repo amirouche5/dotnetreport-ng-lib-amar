@@ -47,7 +47,9 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
               getUsersAndRolesUrl: this.baseServiceUrl + '/Report/GetUsersAndRoles',
               userSettings: result,
               execReportUrl: this.baseServiceUrl + '/Report/RunReport',
-              samePageOnRun: true
+              samePageOnRun: true,
+              runExportUrl: this.baseServiceUrl,
+              printReportUrl: this.baseServiceUrl + '/Report/ReportPrint'
           });
   
           vm.printReport = function () {
@@ -63,10 +65,6 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
                   printWindow?.print();
                   printWindow?.close();
               }, 250);
-          }
-  
-          vm.downloadExcel = function () {
-              $("#downloadExcel").submit();
           }
   
           vm.init(0, result.noAccount);

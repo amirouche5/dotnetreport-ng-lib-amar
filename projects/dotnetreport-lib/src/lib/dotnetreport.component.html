@@ -838,15 +838,6 @@
                 <div class="report-view" data-bind="with: $root">
                     
                     <div class="pull-right">
-                        <form action="{{ exportExcelUrl }}" method="post" id="downloadExcel">
-                            <input type="hidden" name="reportSql" data-bind="value: currentSql" />
-                            <input type="hidden" name="connectKey" data-bind="value: currentConnectKey" />
-                            <input type="hidden" name="reportName" data-bind="value: ReportName" />
-                            <input type="hidden" name="allExpanded" data-bind="value: allExpanded" />
-                            <input type="hidden" name="expandSqls" data-bind="value: getExpandSqls" />
-                            <input type="hidden" name="columnDetails" data-bind="value: getColumnDetails" />
-                        </form>
-        
                         <button data-bind="click: function() {$root.ReportMode('start');}" class="btn btn-primary">
                             Back to Reports
                         </button>
@@ -855,9 +846,28 @@
                             <span class="fa fa-print" aria-hidden="true"></span> Print Report
                         </button>
     
-                        <button type="button" class="btn btn-secondary" data-bind="click: downloadExcel">
-                            <span class="fa fa-file-excel" aria-hidden="true"></span> Export to Excel
-                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-download"></span> Export <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a href="#" data-bind="click: downloadPdfAlt">
+                                        <span class="fa fa-file-pdf-o"></span> Pdf
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="#" data-bind="click: downloadExcel">
+                                        <span class="fa fa-file-excel-o"></span> Excel
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="#" data-bind="click: downloadCsv">
+                                        <span class="fa fa-file-excel-o"></span> Csv
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <br />
                     <br />
@@ -978,5 +988,3 @@
       <div [innerHtml]="reportTemplates"></div>
       <!-- Templates -->
     
-    <div style="padding-top: 30px;">Powered by <a href="http://www.dotNetReport.com" target="_blank">dotnetReport.com</a></div>
-    </div>
