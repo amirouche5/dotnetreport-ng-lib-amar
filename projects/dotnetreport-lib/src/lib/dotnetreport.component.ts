@@ -81,6 +81,10 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
       ko.cleanNode(document.getElementById('dot-net-report'));
   }
+
+  public init() {
+    this.ngOnInit();
+  }
   
   private renderKOTemplates() {
   
