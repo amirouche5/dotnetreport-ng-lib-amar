@@ -1,6 +1,6 @@
 {
   "name": "dotnetreport-ng",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Angular Component for dotnetreport",
   "keywords": [
     "dotnet report",
@@ -12,8 +12,8 @@
     "name": "dotnetreport"
   },
   "peerDependencies": {
-    "@angular/common": ">=11.0.9",
-    "@angular/core": ">=11.0.9",
+    "@angular/common": ">=12.2.17",
+    "@angular/core": ">=12.2.17",
     "@types/jquery": "^3.4.1",
     "@types/knockout": "^3.4.72",
     "dotnetreport": "^4.3.6"
