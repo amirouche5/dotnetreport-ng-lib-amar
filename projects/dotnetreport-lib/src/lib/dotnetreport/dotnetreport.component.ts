@@ -25,14 +25,14 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
       @Inject(BASE_URL_TOKEN) private baseUrl: string,
       private http: HttpClient) { 
   
-        this.baseServiceUrl = this.baseUrl; // "http://localhost:39378";    
+        this.baseServiceUrl = this.baseUrl + '/api';   
         this.exportExcelUrl = this.baseServiceUrl + '/DotNetReport/DownloadExcel';
         this.reportTemplates = "";
       }
   
     ngOnInit() {
   
-      let getUsersAndRolesUrl = this.baseServiceUrl + "/DotNetReport/GetUsersAndRoles";
+      let getUsersAndRolesUrl = this.baseServiceUrl + "/DotNetReportApi/GetUsersAndRoles";
       getUsersAndRolesUrl = getUsersAndRolesUrl.replace(/[?&]$/, "");
   
       this.http.get(getUsersAndRolesUrl).subscribe((response: any) => {
@@ -41,15 +41,15 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
           let vm = new reportViewModel({
               runReportUrl: this.baseServiceUrl + '/DotNetReport/Report',
               reportWizard: $("#modal-reportbuilder"),
-              lookupListUrl: this.baseServiceUrl + '/DotNetReport/GetLookupList',
-              apiUrl: this.baseServiceUrl + '/DotNetReport/CallReportApi',
-              runReportApiUrl: this.baseServiceUrl + '/DotNetReport/RunReportApi',
-              getUsersAndRolesUrl: this.baseServiceUrl + '/DotNetReport/GetUsersAndRoles',
+              lookupListUrl: this.baseServiceUrl + '/api/DotNetReportApi/GetLookupList',
+              apiUrl: this.baseServiceUrl + '/DotNetReportApi/CallReportApi',
+              runReportApiUrl: this.baseServiceUrl + '/DotNetReportApi/RunReportApi',
+              getUsersAndRolesUrl: this.baseServiceUrl + '/DotNetReportApi/GetUsersAndRoles',
               userSettings: result,
-              execReportUrl: this.baseServiceUrl + '/DotNetReport/RunReport',
+              execReportUrl: this.baseServiceUrl + '/DotNetReportApi/RunReport',
               samePageOnRun: true,
-              runExportUrl: this.baseServiceUrl,
-              printReportUrl: this.baseServiceUrl + '/DotNetReport/ReportPrint'
+              runExportUrl: this.baseUrl + '/DotNetReport/',
+              printReportUrl: this.baseUrl + '/DotNetReport/ReportPrint'
           });
   
           vm.printReport = function () {
