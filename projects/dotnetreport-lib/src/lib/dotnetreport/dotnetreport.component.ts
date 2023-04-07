@@ -17,7 +17,6 @@ declare var $: any;
 
 export class DotnetreportComponent implements OnInit, OnDestroy {
     private baseServiceUrl: string;
-    public exportExcelUrl: string;
     public reportTemplates: SafeHtml;
     private queryParams: { [key: string]: string };
   
@@ -29,7 +28,6 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute) { 
   
         this.baseServiceUrl = this.baseUrl + '/api';   
-        this.exportExcelUrl = this.baseServiceUrl + '/DotNetReport/DownloadExcel';
         this.reportTemplates = "";
       }
   

@@ -19,7 +19,6 @@ declare var _: any;
 
 export class DotnetdashboardComponent implements OnInit, OnDestroy {
     private baseServiceUrl: string;
-    public exportExcelUrl: string;
     public reportTemplates: SafeHtml;
     private queryParams: { [key: string]: string };
   
@@ -30,8 +29,7 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
       private http: HttpClient,
       private route: ActivatedRoute) { 
   
-        this.baseServiceUrl = this.baseUrl + '/api'; // "http://localhost:39378";   
-        this.exportExcelUrl = this.baseServiceUrl + '/DotNetReport/DownloadExcel';
+        this.baseServiceUrl = this.baseUrl + '/api'; // "http://localhost:39378"; \
         this.reportTemplates = "";
       }
   
