@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BASE_URL_TOKEN } from './../dotnetreport-lib.di';
+import { ActivatedRoute } from '@angular/router';
 
 declare var ko: any;
 declare var reportViewModel: any;
@@ -18,12 +19,14 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
     private baseServiceUrl: string;
     public exportExcelUrl: string;
     public reportTemplates: SafeHtml;
+    private queryParams: { [key: string]: string };
   
     constructor(injector: Injector,
       private sanitizer: DomSanitizer,
       private cdref: ChangeDetectorRef,
       @Inject(BASE_URL_TOKEN) private baseUrl: string,
-      private http: HttpClient) { 
+      private http: HttpClient,
+      private route: ActivatedRoute) { 
   
         this.baseServiceUrl = this.baseUrl + '/api';   
         this.exportExcelUrl = this.baseServiceUrl + '/DotNetReport/DownloadExcel';
@@ -34,6 +37,8 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
   
       let getUsersAndRolesUrl = this.baseServiceUrl + "/DotNetReportApi/GetUsersAndRoles";
       getUsersAndRolesUrl = getUsersAndRolesUrl.replace(/[?&]$/, "");
+      this.queryParams = this.route.snapshot.queryParams;
+        
   
       this.http.get(getUsersAndRolesUrl).subscribe((response: any) => {
   
@@ -48,6 +53,8 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
               userSettings: result,
               execReportUrl: this.baseServiceUrl + '/DotNetReportApi/RunReport',
               samePageOnRun: true,
+              reportMode: this.queryParams["linkedreport"] == "true" ? "linked" : "",
+              dataFilters: result.dataFilters,
               runExportUrl: this.baseUrl + '/DotNetReport/',
               printReportUrl: this.baseUrl + '/DotNetReport/ReportPrint'
           });

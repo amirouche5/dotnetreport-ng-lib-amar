@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BASE_URL_TOKEN } from './../dotnetreport-lib.di';
+import { ActivatedRoute } from '@angular/router';
 
 declare var ko: any;
-declare var reportViewModel: any;
+declare var dashboardViewModel: any;
 declare var $: any;
 
 @Component({
@@ -18,63 +19,79 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
     private baseServiceUrl: string;
     public exportExcelUrl: string;
     public reportTemplates: SafeHtml;
+    private queryParams: { [key: string]: string };
   
     constructor(injector: Injector,
       private sanitizer: DomSanitizer,
       private cdref: ChangeDetectorRef,
       @Inject(BASE_URL_TOKEN) private baseUrl: string,
-      private http: HttpClient) { 
+      private http: HttpClient,
+      private route: ActivatedRoute) { 
   
-        this.baseServiceUrl = this.baseUrl; // "http://localhost:39378";    
+        this.baseServiceUrl = this.baseUrl + '/api'; // "http://localhost:39378";   
         this.exportExcelUrl = this.baseServiceUrl + '/DotNetReport/DownloadExcel';
         this.reportTemplates = "";
       }
   
     ngOnInit() {
-  
-      let getUsersAndRolesUrl = this.baseServiceUrl + "/DotNetReport/GetUsersAndRoles";
-      getUsersAndRolesUrl = getUsersAndRolesUrl.replace(/[?&]$/, "");
-  
-      this.http.get(getUsersAndRolesUrl).subscribe((response: any) => {
-  
-          let result = response;
-          let vm = new reportViewModel({
-              runReportUrl: this.baseServiceUrl + '/DotNetReport/Report',
-              reportWizard: $("#modal-reportbuilder"),
-              lookupListUrl: this.baseServiceUrl + '/DotNetReport/GetLookupList',
-              apiUrl: this.baseServiceUrl + '/DotNetReport/CallReportApi',
-              runReportApiUrl: this.baseServiceUrl + '/DotNetReport/RunReportApi',
-              getUsersAndRolesUrl: this.baseServiceUrl + '/DotNetReport/GetUsersAndRoles',
-              userSettings: result,
-              execReportUrl: this.baseServiceUrl + '/DotNetReport/RunReport',
-              samePageOnRun: true,
-              runExportUrl: this.baseServiceUrl,
-              printReportUrl: this.baseServiceUrl + '/DotNetReport/ReportPrint'
-          });
-  
-          vm.printReport = function () {
-              var printWindow = window.open("");
-              printWindow?.document.open();
-              printWindow?.document.write('<html><head>' +
-                  '<link href="/Content/bootstrap.css" rel="stylesheet" />'+
-                  '<style type="text/css">a[href]:after {content: none !important;}</style>' +
-                  '</head><body>' + $('.report-inner').html() +
-                  '</body></html>');
-             
-              setTimeout(function () {
-                  printWindow?.print();
-                  printWindow?.close();
-              }, 250);
-          }
-  
-          vm.init(0, result.noAccount);
-  
-          this.renderKOTemplates();
-          ko.applyBindings(vm, document.getElementById('dot-net-report'));
-  
-          this.bindWindowResize(vm);
-      });
-  }
+        var reports: { reportSql: any; reportId: any; reportFilter: any; connectKey: any; x: any; y: any; width: any; height: any; }[] = [];
+        var dashboards: { id: any; name: any; description: any; selectedReports: any; userId: any; userRoles: any; viewOnlyUserId: any; viewOnlyUserRoles: any; }[] | { id: number; }[] = [];
+        this.queryParams = this.route.snapshot.queryParams;
+              
+        let getDashboardsUrl = this.baseServiceUrl + "/DotNetReportApi/GetDashboards";
+        let loadSavedDashboard = this.baseServiceUrl + "/DotNetReportApi/LoadSavedDashboard";
+        let getUsersAndRolesUrl = this.baseServiceUrl + "/DotNetReportApi/GetUsersAndRoles";
+        getUsersAndRolesUrl = getUsersAndRolesUrl.replace(/[?&]$/, "");
+
+        
+        this.http.get(getDashboardsUrl).subscribe((dashboardData: any) => {
+            dashboardData.forEach((d:any)=> {
+                dashboards.push({ id: d.Id, name: d.Name, description: d.Description, selectedReports: d.SelectedReports, userId: d.UserId, userRoles: d.UserRoles, viewOnlyUserId: d.ViewOnlyUserId, viewOnlyUserRoles: d.ViewOnlyUserRoles });
+            });
+
+            var dashboardId = parseInt(this.queryParams['id'] || '0');
+            if (!dashboardId && dashboards.length > 0) { dashboardId = dashboards[0].id; }
+
+            this.http.get(loadSavedDashboard + "?id=" + dashboardId).subscribe((reportsData: any) => {
+                reportsData.forEach((r:any) => {
+                    reports.push({ reportSql: r.ReportSql, reportId: r.ReportId, reportFilter: r.ReportFilter, connectKey: r.ConnectKey, x: r.X, y: r.Y, width: r.Width, height: r.Height });
+                });
+
+                this.http.get(getUsersAndRolesUrl).subscribe((response: any) => {
+
+                    let result = response;
+                    let vm = new dashboardViewModel({
+                        runReportUrl: this.baseServiceUrl + '/DotNetReport/Report',
+                        execReportUrl: this.baseServiceUrl + '/DotNetReportApi/RunReport',
+                        reportWizard: $("#filter-panel"),
+                        lookupListUrl: this.baseServiceUrl + '/api/DotNetReportApi/GetLookupList',
+                        apiUrl: this.baseServiceUrl + '/DotNetReportApi/CallReportApi',
+                        runReportApiUrl: this.baseServiceUrl + '/DotNetReportApi/RunReportApi',
+                        getUsersAndRolesUrl: getUsersAndRolesUrl,
+                        reportMode: "execute",
+                        reports: reports,
+                        dashboards: dashboards,
+                        users: result.users,
+                        userRoles: result.userRoles,
+                        allowAdmin: result.allowAdminMode,
+                        dataFilters: result.dataFilters,
+                        dashboardId: dashboardId,                            
+                        userSettings: result,
+                        samePageOnRun: true,
+                        runExportUrl: this.baseUrl + '/DotNetReport/',
+                        printReportUrl: this.baseUrl + '/DotNetReport/ReportPrint'
+                    });
+                    
+                    vm.init(0, result.noAccount);
+                    this.renderKOTemplates();
+                    ko.applyBindings(vm, document.getElementById('dot-net-report'));
+
+                    this.bindWindowResize(vm);
+                    this.bindGridInit(vm);
+                });
+            });
+        });
+    }
   
   ngOnDestroy() {
       ko.cleanNode(document.getElementById('dot-net-report'));
@@ -807,10 +824,44 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
   
   private bindWindowResize(vm: any): void {
     $(window).resize(function () {
-        if (vm.reportMode == "execute") {
-            vm.DrawChart()
-        };
+        vm.DrawChart()
     });
+  }
+
+  private bindGridInit(vm:any): void{
+    var options = {
+        cellHeight: 80,
+        verticalMargin: 10
+    };
+    $('.grid-stack').gridstack(options);
+    $('.grid-stack').on('change', function(event: any, items: any) {
+        items.forEach(function(x: any) {
+            vm.updatePosition(x);
+        });
+    });
+    $('.grid-stack').on('resizestop', function(event: { target: any; }, item: { size: { height: number; }; }) {
+        var e = $(event.target).find('.report-chart');
+        var d = $(event.target).find('table');
+        if (e.length > 0 && d.length == 0) {
+            e.height(item.size.height - e[0].offsetTop - 40);
+            vm.drawChart();
+        }
+    }); 
+
+    setTimeout(function() {
+        vm.drawChart();
+
+        var items = $('.grid-stack-item');
+        items.forEach((x: { clientHeight: number; })=> {
+            var e = $(x).find('.report-chart');
+            var d = $(x).find('table');
+            if (e.length > 0 && x.clientHeight && d.length == 0) {
+                e.height(x.clientHeight - e[0].offsetTop - 40);
+            }
+        });
+
+        vm.drawChart();                                
+    }, 1000);
   }
   
   
