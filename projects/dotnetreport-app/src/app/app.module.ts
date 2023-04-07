@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { DotnetReportModule } from 'dotnetreport-ng';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { DotnetReportModule } from 'dotnetreport-ng';
     BrowserModule,
     AppRoutingModule,
     DotnetReportModule.forRoot('https://localhost:52107'),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
