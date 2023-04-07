@@ -91,8 +91,7 @@
 
 <div class="clearfix"></div>
 
-<div class="grid-stack" data-bind="visible: reports().length>0" style="display: none;">
-    <div data-bind="foreach: reports">
+<div class="grid-stack" data-bind="visible: reports().length>0, foreach: reports" style="display: none;">
     <div class="grid-stack-item" data-bind="attr: {'data-gs-x': x, 'data-gs-y': y, 'data-gs-width': width, 'data-gs-height': height, 'data-gs-auto-position': true, 'data-gs-id': ReportID}">
 
         <div class="card" data-bind="attr: {class: 'card ' + panelStyle + ' grid-stack-item-content'}, css: { expanded: isExpanded }" style="overflow-y: hidden;">
@@ -154,8 +153,6 @@
                 </div>
             </div>
         </div>
-
-    </div>
     </div>
 </div>
 
