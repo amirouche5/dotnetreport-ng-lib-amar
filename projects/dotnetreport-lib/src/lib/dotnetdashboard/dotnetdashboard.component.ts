@@ -829,14 +829,14 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
   private bindWindowResize(vm: any): void {
     let _vm = vm;
     $(window).resize(function () {
-        _vm.DrawChart()
+        _vm.drawChart()
     });
   }
 
   private bindGridInit(vm:any): void {
     let _vm = vm;
 
-    setTimeout(function () {
+    $(function () {
         var options = {
             cellHeight: 80,
             verticalMargin: 10
@@ -845,7 +845,7 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
         $('.grid-stack').on('change', function(event: any, items: any[]) {
           if (items) {
             _.forEach(items, function(x: any) {
-              vm.updatePosition(x);
+              _vm.updatePosition(x);
             });
           }
         });
@@ -854,11 +854,13 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
             var d = $(event.target).find('table');
             if (e.length > 0 && d.length == 0) {
                 e.height(item.size.height - e[0].offsetTop - 40);
-                vm.drawChart();
+                _vm.drawChart();
             }
         });                               
+    });
     
-        vm.drawChart();
+    setTimeout(function () {
+        _vm.drawChart();
 
         var items = $('.grid-stack-item');
         _.forEach(items, function(x: { clientHeight: number; }) {

@@ -4,14 +4,6 @@
     <p>
         Manage your Reports below. You can use the intuitive and user friendly Report Builder to create many types of Ad-hoc Reports.
     </p>
-    <div class="alert alert-info">
-        <div data-bind="if: currentUserName">Current User: <span data-bind="text: currentUserName"></span></div>
-        <div data-bind="if: currentUserRole">Current Roles: <span data-bind="text: currentUserRole"></span></div>
-    </div>
-    <div class="alert alert-warning">
-        You can easily integrate the Report Builder in your Application. See how to <a href="https://dotnetreport.com/getting-started-with-dotnet-report/">Get Started here</a>. <br />
-    </div>
-    
     <div data-bind="template: {name: 'admin-mode-template'}, visible: allowAdmin" style="display: none;"></div>
     
     <!--
