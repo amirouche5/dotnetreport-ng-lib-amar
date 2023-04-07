@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 declare var ko: any;
 declare var dashboardViewModel: any;
 declare var $: any;
+declare var gridstack: any;
+declare var _: any;
 
 @Component({
   selector: 'app-dotnetdashboard',
@@ -36,7 +38,6 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
     ngOnInit() {
         var reports: { reportSql: any; reportId: any; reportFilter: any; connectKey: any; x: any; y: any; width: any; height: any; }[] = [];
         var dashboards: { id: any; name: any; description: any; selectedReports: any; userId: any; userRoles: any; viewOnlyUserId: any; viewOnlyUserRoles: any; }[] | { id: number; }[] = [];
-        this.queryParams = this.route.snapshot.queryParams;
               
         let getDashboardsUrl = this.baseServiceUrl + "/DotNetReportApi/GetDashboards";
         let loadSavedDashboard = this.baseServiceUrl + "/DotNetReportApi/LoadSavedDashboard";
@@ -49,6 +50,7 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
                 dashboards.push({ id: d.Id, name: d.Name, description: d.Description, selectedReports: d.SelectedReports, userId: d.UserId, userRoles: d.UserRoles, viewOnlyUserId: d.ViewOnlyUserId, viewOnlyUserRoles: d.ViewOnlyUserRoles });
             });
 
+            this.queryParams = this.route.snapshot.queryParams;
             var dashboardId = parseInt(this.queryParams['id'] || '0');
             if (!dashboardId && dashboards.length > 0) { dashboardId = dashboards[0].id; }
 
@@ -64,7 +66,7 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
                         runReportUrl: this.baseServiceUrl + '/DotNetReport/Report',
                         execReportUrl: this.baseServiceUrl + '/DotNetReportApi/RunReport',
                         reportWizard: $("#filter-panel"),
-                        lookupListUrl: this.baseServiceUrl + '/api/DotNetReportApi/GetLookupList',
+                        lookupListUrl: this.baseServiceUrl + '/DotNetReportApi/GetLookupList',
                         apiUrl: this.baseServiceUrl + '/DotNetReportApi/CallReportApi',
                         runReportApiUrl: this.baseServiceUrl + '/DotNetReportApi/RunReportApi',
                         getUsersAndRolesUrl: getUsersAndRolesUrl,
@@ -82,12 +84,14 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
                         printReportUrl: this.baseUrl + '/DotNetReport/ReportPrint'
                     });
                     
-                    vm.init(0, result.noAccount);
-                    this.renderKOTemplates();
-                    ko.applyBindings(vm, document.getElementById('dot-net-report'));
+                    vm.init(0, result.noAccount).done(()=>{
 
-                    this.bindWindowResize(vm);
-                    this.bindGridInit(vm);
+                        this.renderKOTemplates();
+                        ko.applyBindings(vm, document.getElementById('dot-net-report'));
+    
+                        this.bindGridInit(vm);
+                        this.bindWindowResize(vm);
+                    });
                 });
             });
         });
@@ -823,36 +827,41 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
   }
   
   private bindWindowResize(vm: any): void {
+    let _vm = vm;
     $(window).resize(function () {
-        vm.DrawChart()
+        _vm.DrawChart()
     });
   }
 
-  private bindGridInit(vm:any): void{
-    var options = {
-        cellHeight: 80,
-        verticalMargin: 10
-    };
-    $('.grid-stack').gridstack(options);
-    $('.grid-stack').on('change', function(event: any, items: any) {
-        items.forEach(function(x: any) {
-            vm.updatePosition(x);
-        });
-    });
-    $('.grid-stack').on('resizestop', function(event: { target: any; }, item: { size: { height: number; }; }) {
-        var e = $(event.target).find('.report-chart');
-        var d = $(event.target).find('table');
-        if (e.length > 0 && d.length == 0) {
-            e.height(item.size.height - e[0].offsetTop - 40);
-            vm.drawChart();
-        }
-    }); 
+  private bindGridInit(vm:any): void {
+    let _vm = vm;
 
-    setTimeout(function() {
+    setTimeout(function () {
+        var options = {
+            cellHeight: 80,
+            verticalMargin: 10
+        };
+        $('.grid-stack').gridstack(options);
+        $('.grid-stack').on('change', function(event: any, items: any[]) {
+          if (items) {
+            _.forEach(items, function(x: any) {
+              vm.updatePosition(x);
+            });
+          }
+        });
+        $('.grid-stack').on('resizestop', function(event: { target: any; }, item: { size: { height: number; }; }) {
+            var e = $(event.target).find('.report-chart');
+            var d = $(event.target).find('table');
+            if (e.length > 0 && d.length == 0) {
+                e.height(item.size.height - e[0].offsetTop - 40);
+                vm.drawChart();
+            }
+        });                               
+    
         vm.drawChart();
 
         var items = $('.grid-stack-item');
-        items.forEach((x: { clientHeight: number; })=> {
+        _.forEach(items, function(x: { clientHeight: number; }) {
             var e = $(x).find('.report-chart');
             var d = $(x).find('table');
             if (e.length > 0 && x.clientHeight && d.length == 0) {
@@ -860,7 +869,7 @@ export class DotnetdashboardComponent implements OnInit, OnDestroy {
             }
         });
 
-        vm.drawChart();                                
+        _vm.drawChart();                                
     }, 1000);
   }
   
