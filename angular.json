@@ -64,7 +64,8 @@
               "node_modules/toastr/build/toastr.min.css",
               "node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/select2/dist/css/select2.min.css",
-              "node_modules/dotnetreport/src/dotnetreport.css"
+              "node_modules/dotnetreport/src/dotnetreport.css",
+              "node_modules/dotnetreport/src/lib/gridstack.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -80,7 +81,9 @@
               "node_modules/select2/dist/js/select2.min.js",
               "node_modules/lodash/lodash.min.js",
               "node_modules/dotnetreport/src/dotnetreport.js",
-              "node_modules/dotnetreport/src/dotnetreport-helper.js"
+              "node_modules/dotnetreport/src/dotnetreport-helper.js",
+              "node_modules/dotnetreport/src/lib/gridstack.min.js",
+              "node_modules/dotnetreport/src/lib/gridstack.jQueryUI.min.js"
             ]
           },
           "configurations": {
