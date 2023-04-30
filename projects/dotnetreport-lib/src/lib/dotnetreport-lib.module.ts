@@ -17,7 +17,8 @@ import { DotnetsetupComponent } from './dotnetsetup/dotnetsetup.component';
   ],
   exports: [
     DotnetreportComponent,
-    DotnetdashboardComponent
+    DotnetdashboardComponent,
+    DotnetsetupComponent
   ]
 })
 export class DotnetReportModule {
