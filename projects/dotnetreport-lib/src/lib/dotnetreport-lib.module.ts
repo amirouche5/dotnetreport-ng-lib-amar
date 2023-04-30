@@ -3,12 +3,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BASE_URL_TOKEN } from './dotnetreport-lib.di';
 import { DotnetreportComponent } from './dotnetreport/dotnetreport.component';
 import { DotnetdashboardComponent } from './dotnetdashboard/dotnetdashboard.component';
+import { DotnetsetupComponent } from './dotnetsetup/dotnetsetup.component';
 
 
 @NgModule({
   declarations: [
     DotnetreportComponent,
     DotnetdashboardComponent,
+    DotnetsetupComponent,
   ],
   imports: [
     BrowserAnimationsModule
