@@ -6,12 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 
 declare var ko: any;
 declare var manageViewModel: any;
-declare var $: any;
-declare var gridstack: any;
-declare var _: any;
 
 @Component({
-  selector: 'lib-dotnetsetup',
+  selector: 'app-dotnetsetup',
   templateUrl: './dotnetsetup.component.html',
   styleUrls: ['./dotnetsetup.component.css']
 })
@@ -33,10 +30,10 @@ export class DotnetsetupComponent implements OnInit, OnDestroy {
     }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     let loadSetupSchemaUrl = this.baseServiceUrl + "/DotNetReportApi/LoadSetupSchema";
     this.queryParams = this.route.snapshot.queryParams;
-    var databaseApiKey = parseInt(this.queryParams['databaseApiKey'] || '');
+    var databaseApiKey = this.queryParams['databaseApiKey'] || '';
    
     this.http.get(loadSetupSchemaUrl + "?databaseApiKey=" + databaseApiKey).subscribe((model: any) => {
         var options = {
@@ -50,22 +47,20 @@ export class DotnetsetupComponent implements OnInit, OnDestroy {
             saveProcUrl: model.ApiUrl + 'ReportApi/SaveProcedure',
             deleteProcUrl: model.ApiUrl + 'ReportApi/DeleteProcedure',
             reportsApiUrl: model.ApiUrl,
-            getUsersAndRoles: '@Url.Action("GetUsersAndRoles", "DotNetReportApi")',
-            searchProcUrl: '@Url.Action("SearchProcedure", "DotNetReportApi")',
-            getSchemaFromSql: '@Url.Action("GetSchemaFromSql", "DotNetReportApi")',
-            apiUrl: '@Url.Action("CallReportApi", "DotNetReportApi")',
+            getUsersAndRoles: this.baseServiceUrl + '/DotNetReportApi/GetUsersAndRoles',
+            searchProcUrl:  this.baseServiceUrl + '/DotNetReportApi/SearchProcedure',
+            getSchemaFromSql:  this.baseServiceUrl + '/DotNetReportApi/GetSchemaFromSql',
+            apiUrl:  this.baseServiceUrl + '/DotNetReportApi/CallReportApi',
         };
 
+        this.renderKOTemplates();
         var vm = new manageViewModel(options);
         vm.LoadJoins();
         vm.setupManageAccess();
         ko.applyBindings(vm, document.getElementById('dot-net-report'));
 
         vm.LoadDataConnections();
-
         vm.customSql.textQuery.setupQuery();
-
-        this.renderKOTemplates();
             
     });
 
@@ -74,6 +69,10 @@ export class DotnetsetupComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     ko.cleanNode(document.getElementById('dot-net-report'));
  }
+ 
+ public init() {
+    this.ngOnInit();
+  }
 
  private renderKOTemplates() {
   

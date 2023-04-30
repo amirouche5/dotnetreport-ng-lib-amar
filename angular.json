@@ -65,7 +65,9 @@
               "node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/select2/dist/css/select2.min.css",
               "node_modules/dotnetreport/src/dotnetreport.css",
-              "node_modules/dotnetreport/src/lib/gridstack.min.css"
+              "node_modules/dotnetreport/src/lib/gridstack.min.css",
+              "node_modules/tributejs/dist/tribute.css",
+              "node_modules/x-editable-bs4/dist/bootstrap4-editable/css/bootstrap-editable.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -80,8 +82,12 @@
               "node_modules/knockout-sortable/build/knockout-sortable.min.js",
               "node_modules/select2/dist/js/select2.min.js",
               "node_modules/lodash/lodash.min.js",
+              "node_modules/tributejs/dist/tribute.min.js",
+              "node_modules/knockout-mapping/dist/knockout.mapping.js",              
+              "node_modules/x-editable-bs4/dist/bootstrap4-editable/js/bootstrap-editable.min.js",
               "node_modules/dotnetreport/src/dotnetreport.js",
               "node_modules/dotnetreport/src/dotnetreport-helper.js",
+              "node_modules/dotnetreport/src/dotnetreport-setup.js",
               "node_modules/dotnetreport/src/lib/gridstack.min.js",
               "node_modules/dotnetreport/src/lib/gridstack.jQueryUI.min.js"
             ]
