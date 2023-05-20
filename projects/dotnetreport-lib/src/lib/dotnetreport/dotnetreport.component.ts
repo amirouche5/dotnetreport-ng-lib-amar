@@ -44,6 +44,9 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
           let vm = new reportViewModel({
               runReportUrl: this.baseServiceUrl + '/DotNetReport/Report',
               reportWizard: $("#modal-reportbuilder"),
+              linkModal: $("#linkModal"),
+              reportHeader: "report-header",
+              fieldOptionsModal: $("#fieldOptionsModal"),  
               lookupListUrl: this.baseServiceUrl + '/api/DotNetReportApi/GetLookupList',
               apiUrl: this.baseServiceUrl + '/DotNetReportApi/CallReportApi',
               runReportApiUrl: this.baseServiceUrl + '/DotNetReportApi/RunReportApi',
