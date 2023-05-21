@@ -1,7 +1,7 @@
 <div id="dot-net-report" class="body-content">
 
-<div class="row">
-    <div class="col-8" data-bind="with: currentDashboard">
+    <div class="row">
+        <div class="col-8" data-bind="with: currentDashboard">
         <h2 data-bind="text: name ? name : 'Dashboard'">Dashboard</h2>
         <p data-bind="text: description"></p>
     </div>
@@ -101,14 +101,24 @@
                         <span class="fa fa-ellipsis-v"></span>
                     </button>
                     <ul class="dropdown-menu small" style="z-index: 1001;">
-                        <li class="dropdown-item" data-bind="visible: FlyFilters().length> 0" >
+                        <li class="dropdown-item" data-bind="visible: FlyFilters().length> 0">
                             <a href="#" data-bind="click: toggleFlyFilters">
                                 <span class="fa fa-filter"></span> Filter
+                            </a>
+                        </li>
+                        <li class="dropdown-item" data-bind="visible: CanEdit">
+                            <a href="#" data-toggle="modal" data-target="#modal-reportbuilder" data-bind="click: openReport">
+                                <span class="fa fa-pencil"></span> Edit
                             </a>
                         </li>
                         <li class="dropdown-item">
                             <a href="#" data-bind="click: downloadExcel">
                                 <span class="fa fa-file-excel-o"></span> Excel
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" data-bind="click: downloadPdfAlt">
+                                <span class="fa fa-file-pdf-o"></span> PDF
                             </a>
                         </li>
                         <li class="dropdown-item">
@@ -144,6 +154,21 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Report Builder -->
+<div class="modal modal-fullscreen" id="modal-reportbuilder" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-right: 0px !important;" data-bind="with: selectedReport"> 
+<div data-bind="template: {name: 'report-designer', data: $data}"></div>
+</div>
+
+<!-- Field Options Modal -->
+<div class="modal" id="fieldOptionsModal" tabindex="-1" role="dialog" aria-hidden="true" data-bind="with: selectedReport">
+<div data-bind="template: {name: 'report-field-options', data: $data}"></div>
+</div>
+
+<!-- Link Edit Modal -->
+<div class="modal" id="linkModal" tabindex="-1" role="dialog" aria-hidden="true" data-bind="with: selectedReport">
+<div data-bind="template: {name: 'report-link-edit', data: $data}"></div>
 </div>
 
 <div class="modal" id="noaccountModal" tabindex="-1" role="dialog" aria-hidden="true">
