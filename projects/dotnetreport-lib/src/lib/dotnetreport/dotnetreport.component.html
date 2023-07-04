@@ -303,9 +303,9 @@
                             <button class="btn btn-primary" data-bind="visible: ReportMode()=='linked'">
                                 Back to Parent Report
                             </button>
-                            <a href="#" class="btn btn-primary" data-bind="visible: $root.CanEdit()" data-toggle="modal" data-target="#modal-reportbuilder">
+                            <button class="btn btn-primary" data-bind="visible: $root.CanEdit()" data-toggle="modal" data-target="#modal-reportbuilder">
                                 Edit Report
-                            </a>
+                            </button>
 
                             <div class="btn-group">
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -420,9 +420,9 @@
                             Back to Reports
                         </button>
 
-                        <a href="#" class="btn btn-primary" data-bind="visible: $root.CanEdit()">
+                        <button class="btn btn-primary" data-bind="visible: $root.CanEdit()" data-toggle="modal" data-target="#modal-reportbuilder">
                             Edit Report
-                        </a>
+                        </button>
                         <h3>An unexpected error occured while running the Report</h3>
                         <hr />
                         <b>Error Details</b>

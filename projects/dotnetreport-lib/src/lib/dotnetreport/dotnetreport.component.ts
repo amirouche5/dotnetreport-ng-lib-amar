@@ -629,7 +629,7 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
                     </td>
                     <td>
                         <div class="form-group">
-                            <select class="form-control" style="width: 100%;" data-bind="options: $parentContext.$parent.selectedFieldsCanFilter, optionsText: 'selectedFieldName', optionsCaption: 'Please Choose', value: Field, attr: {required: Field()==null?'required':false}, disable: Field() && Field().forced"></select>
+                            <select class="form-control" style="width: 100%;" data-bind="options: $parents[$parents.length-1].selectedFieldsCanFilter, optionsText: 'selectedFieldName', optionsCaption: 'Please Choose', value: Field, attr: {required: Field()==null?'required':false}, disable: Field() && Field().forced"></select>
                         </div>
                     </td>
                     <td data-bind="with: Field">
@@ -676,13 +676,13 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
 </script>
 
 <script type="text/html" id="filter-parameters">
-    <div class="table-responsive card" style="margin-left: 20px;">
+    <div class="table-responsive card">
         <div class="card-body">
             <span data-bind="hidden: showParameters">No filters available to choose</span>
             <table class="table  table-hover table-borderless" data-bind="visible: showParameters">
                 <thead>
                     <tr>
-                        <th style="width: 30%">Paramter</th>
+                        <th style="width: 30%">Filter</th>
                         <th style="width: 20%"></th>
                         <th style="width: 30%">Value</th>
                         <th></th>
@@ -1326,20 +1326,16 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
                         </ul>
                     </div>
                     <hr />
-                    <div data-bind="if: useStoredProc">
+                    <div>
                         <h5><span class="fa fa-filter"></span>&nbsp;Choose filters</h5>
 
                         <div class="row" style="padding: 10px 10px; overflow-x: auto;">
-                            <div data-bind="template: {name: 'filter-parameters'}" class="col"></div>
-                            <br />
-                        </div>
-                    </div>
-                    <div data-bind="ifnot: useStoredProc">
-                        <h5><span class="fa fa-filter"></span>&nbsp;Choose filters</h5>
-
-                        <div class="row" style="padding: 10px 10px; overflow-x: auto;">
-                            <div data-bind="template: {name: 'filter-group'}" class="col-12"></div>
-                            <br />
+                            <div data-bind="if: useStoredProc" class="col-md-12">
+                                <div data-bind="template: {name: 'filter-parameters'}" ></div>
+                            </div>
+                            <div data-bind="ifnot: useStoredProc" class="col-md-12">
+                                <div data-bind="template: {name: 'filter-group'}"></div>
+                            </div>
 
                             <div class="checkbox col-12">
                                 <label>
@@ -1347,6 +1343,7 @@ export class DotnetreportComponent implements OnInit, OnDestroy {
                                     Allow setting up and saving filters on Report
                                 </label>
                             </div>
+                            <br />
                         </div>
                     </div>
                 </div>

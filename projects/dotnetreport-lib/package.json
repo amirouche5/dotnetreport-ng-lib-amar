@@ -16,7 +16,7 @@
     "@angular/core": ">=12.2.17",
     "@types/jquery": "^3.4.1",
     "@types/knockout": "^3.4.72",
-    "dotnetreport": "^5.1.0"
+    "dotnetreport": "^5.1.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"
