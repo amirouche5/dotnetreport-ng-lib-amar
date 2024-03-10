@@ -1,26 +1,27 @@
 <div id="dot-net-report" class="body-content">
 
-    <div class="row">
-        <div class="col-8" data-bind="with: currentDashboard">
-        <h2 data-bind="text: name ? name : 'Dashboard'">Dashboard</h2>
+<div class="row">
+    <div class="col-4" data-bind="with: currentDashboard">
+        <h2 title="Switch Dashboard">
+            <select class="form-control select-as-text" title="Switch Dashboard" data-bind="select2: {minimumResultsForSearch: Infinity}, options: $parent.dashboards, optionsText: 'name', optionsValue: 'id', value: $parent.selectDashboard"></select>
+        </h2>
         <p data-bind="text: description"></p>
     </div>
-
-    <div class="col-4 right-align" style="display: none;" data-bind="visible: dashboards().length > 0 ">
-        <div class="row">
-
-            <label class="col">Switch Dashboard</label>
-            <select class="col form-control" data-bind="options: dashboards, optionsText: 'name', optionsValue: 'id', value: selectDashboard"></select>
-            <div class="col">
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-dashboard-modal" title="Edit Dashboard Settings" data-bind="click: editDashboard">Edit</button>
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-dashboard-modal" title="Add a New Dashboard" data-bind="click: newDashboard">Add</button>
-            </div>
-        </div>
+    <div class="col-4">
+        &nbsp;
     </div>
 </div>
 <div class="clearfix"></div>
 
 <div data-bind="template: {name: 'admin-mode-template'}, visible: allowAdmin" style="display: none;"></div>
+
+<div class="row padded-top">
+    <div class="col-md-12">
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-dashboard-modal" title="Edit Dashboard Settings" data-bind="click: editDashboard">Edit this Dashboard</button>
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-dashboard-modal" title="Add a New Dashboard" data-bind="click: newDashboard">Add a new Dashboard</button>
+    </div>
+</div>
+<div class="padded-top"></div>
 
 <div class="centered" style="display: none;" data-bind="visible: dashboards().length == 0 ">
     No Dashboards yet. Click below to Start<br />
@@ -47,7 +48,7 @@
                             <label class="col-md-3 col-sm-3 control-label">Description</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea class="form-control text-box" style="width: 100%;" data-bind="value: Description" placeholder="Optional Description for the Dashboard">
-                                </textarea>
+                                    </textarea>
                             </div>
                         </div>
                     </div>
@@ -76,8 +77,8 @@
                     </div>
                 </div>
                 <div data-bind="if: $parent.adminMode">
-                <hr />
-                <div data-bind="template: {name: 'manage-access-template'}"></div>
+                    <hr />
+                    <div data-bind="template: {name: 'manage-access-template'}"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -88,8 +89,13 @@
     </div>
 </div>
 
-
 <div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div data-bind="template: {name: 'fly-filter-template'}"></div>
+        <br />
+    </div>
+</div>
 
 <div class="grid-stack" data-bind="visible: reports().length>0, foreach: reports" style="display: none;">
     <div class="grid-stack-item" data-bind="attr: {'data-gs-x': x, 'data-gs-y': y, 'data-gs-width': width, 'data-gs-height': height, 'data-gs-auto-position': true, 'data-gs-id': ReportID}">
@@ -122,6 +128,12 @@
                             </a>
                         </li>
                         <li class="dropdown-item">
+                            <a data-bind="attr: {href: '/DotNetReport/Report?linkedreport=true&noparent=true&reportId=' + ReportID() }" target="_blank">
+                                <span class="fa fa-file"></span> Report
+                            </a>
+                        </li>
+
+                        <li class="dropdown-item">
                             <a href="#" data-bind="click: function() { $parent.removeReportFromDashboard(ReportID()); }">
                                 <span class="fa fa-close"></span> Remove
                             </a>
@@ -153,41 +165,23 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
 <!-- Report Builder -->
-<div class="modal modal-fullscreen" id="modal-reportbuilder" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-right: 0px !important;" data-bind="with: selectedReport"> 
-<div data-bind="template: {name: 'report-designer', data: $data}"></div>
+<div class="modal modal-fullscreen" id="modal-reportbuilder" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-right: 0px !important;" data-bind="with: selectedReport">
+    <div data-bind="template: {name: 'report-designer', data: $data}"></div>
 </div>
 
 <!-- Field Options Modal -->
 <div class="modal" id="fieldOptionsModal" tabindex="-1" role="dialog" aria-hidden="true" data-bind="with: selectedReport">
-<div data-bind="template: {name: 'report-field-options', data: $data}"></div>
+    <div data-bind="template: {name: 'report-field-options', data: $data}"></div>
 </div>
 
 <!-- Link Edit Modal -->
 <div class="modal" id="linkModal" tabindex="-1" role="dialog" aria-hidden="true" data-bind="with: selectedReport">
-<div data-bind="template: {name: 'report-link-edit', data: $data}"></div>
-</div>
-
-<div class="modal" id="noaccountModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Account not Setup</h4>
-            </div>
-            <div class="modal-body">
-                <p class="alert alert-danger">dotnet Report Account Configuration missing!</p>
-                <p>You do not have the neccessary initial configuration completed to use dotnet Report.</p>
-                <p>Please view the <a href="https://dotnetreport.com/blog/2016/03/getting-started-with-dotnet-report/" target="_blank">Getting Started Guide</a> to correctly configure dotnet Report.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+    <div data-bind="template: {name: 'report-link-edit', data: $data}"></div>
 </div>
 
 <!-- Templates -->
