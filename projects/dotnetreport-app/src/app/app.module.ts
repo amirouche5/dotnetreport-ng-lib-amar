@@ -4,8 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { DotnetReportModule } from 'dotnetreport-ng';
+ 
 import { HttpClientModule } from '@angular/common/http';
+import { DotnetReportModule } from 'projects/dotnetreport-lib/src/lib/dotnetreport-lib.module';
 
 
 @NgModule({
